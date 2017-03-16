@@ -1,0 +1,82 @@
+<html>
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
+	<link rel="stylesheet" href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<meta name="viewport" content="width=device-width">
+</head>
+<style>
+body{width:700;}
+p{font-family:'Lato';font-weight:300;font-size:1.2em;}
+input{border:0px;}
+input[type='number']{margin-left:3px;font-family:'Lato';font-weight:300;font-size:1em;width:75px;text-align:center;border:1px solid rgb(188,188,188);padding:6px 8px 6px 8px;}
+svg{border:.5px solid red;margin-top:10px;margin-bottom:10px;}
+
+.textholder{display:flex;justify-content:space-around;flex-wrap:wrap;text-align:center;}
+.telement{width:calc(50% - 10px);font-family:'Lato';font-weight:300;font-size:1em;padding-right:5px;margin-bottom:5px;}
+.select_carat{position:relative;}
+.select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:0px;height:0px;background-color:white;color:#f58c63;left:131px;top:2.5px;position:absolute;pointer-events:none;font-size:.8em;}
+.styled-select select{font-family:'Lato';font-weight:300;cursor:pointer;font-size:1em;width:150px;display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:6px 8px 6px 8px;margin:0px;border:1px solid rgb(188,188,188);background-color:white;border-radius:0px;}
+</style>
+
+<body>	
+
+<div class='textholder'>
+	<div class='telement' style='text-align:right'>In 
+		<span class='styled-select' style='margin-right:1px'>
+			<span class='select_carat'>
+				<select class="" id='state'>
+					<option value='U.S.'>U.S.</option>
+					<option value='DC' selected>Washington, DC</option>
+				</select>
+			</span>
+		</span>
+		the minimum wage is: 
+	</div>
+	<div class='telement' style='text-align:left'>
+		 $<input type='number' step='any' max='15' min='0' value='7.75' disabled>
+	</div>
+	<div class='telement' style='text-align:right;padding:6px 5px 6px 0px;'>
+		Increasing the minimum wage to: 
+	</div>
+	<div class='telement' style='text-align:left'>
+		 $<input type='number' step='any' max='15' min='0' placeholder='12.00'>
+	</div>
+</div>
+
+<!-- <div class='textholder'>
+	<div class='telement'>Would lift...</div>
+</div> -->
+<svg id='di1' viewBox='0 0 700 220'></svg>
+<!-- <p>... out of poverty.</p> -->
+<div class='textholder'>
+	<div class='telement' style='width:90%'>
+		It would also boost the income of low-income families.
+	</div>
+</div>
+<svg id='di2' viewBox='0 0 700 220'></svg>
+</body>
+
+<script>
+
+var di1 = Snap('#di1')
+var di2 = Snap('#di2')
+
+function get_state(){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", 'http://ip-api.com/json', false );
+    xmlHttp.send( null );
+    return JSON.parse(xmlHttp.responseText)['region'];
+}
+
+function draw_pov(){
+	var children=0
+	var elderly=0
+	var black=0
+	var latino=0
+	var white=0
+}
+
+</script>
