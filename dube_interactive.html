@@ -8,17 +8,26 @@
 	<meta name="viewport" content="width=device-width">
 </head>
 <style>
-body{width:700;}
+body{width:700;margin-top:20px;margin-left:auto;margin-right:auto;background:#ddd;}
 p{font-family:'Lato';font-weight:300;font-size:1.2em;}
 input{border:0px;}
 input[type='number']{margin-left:3px;font-family:'Lato';font-weight:300;font-size:1em;width:75px;text-align:center;border:1px solid rgb(188,188,188);padding:6px 8px 6px 8px;}
-svg{border:.5px solid red;margin-top:10px;margin-bottom:10px;}
+svg{margin-top:10px;margin-bottom:10px;width:700px;}
+hr{border:0px;background:black;width:300px;height:1px;margin-top:20px;margin-bottom:20px;}
+*{margin:0;}
 
+.full-width {width: 100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;}
 .textholder{display:flex;justify-content:space-around;flex-wrap:wrap;text-align:center;}
 .telement{width:calc(50% - 10px);font-family:'Lato';font-weight:300;font-size:1em;padding-right:5px;margin-bottom:5px;}
 .select_carat{position:relative;}
 .select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:0px;height:0px;background-color:white;color:#f58c63;left:131px;top:2.5px;position:absolute;pointer-events:none;font-size:.8em;}
 .styled-select select{font-family:'Lato';font-weight:300;cursor:pointer;font-size:1em;width:150px;display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:6px 8px 6px 8px;margin:0px;border:1px solid rgb(188,188,188);background-color:white;border-radius:0px;}
+.circleholder{display:flex;justify-content:center;margin-bottom:20px;}
+.povcircle{display:inline-block;height:70px;width:70px;border-radius:50%;background:black;margin:15px 60px 0px 60px;border:1px solid #fff;}
+.povcircleinterior1{font-size:1.5em;text-align:center;color:white;line-height:70px;font-family:'Lato';font-weight:700;margin:0;text-shadow:0px 0px 3px black;}
+.povcircleinterior2{font-size:.8em;font-size;font-family:'Lato';text-align:center;color:white;font-weight:300;}
+.circlecolumn{display:flex;flex-direction:column;}
+.circles{border-top:1px solid white;border-bottom:1px solid white;background:black;padding:15px;color:white;text-align:center;font-family:"Lato";font-weight:300;font-size:1.2em;margin-top:15px;margin-bottom:15px;}
 </style>
 
 <body>	
@@ -28,55 +37,169 @@ svg{border:.5px solid red;margin-top:10px;margin-bottom:10px;}
 		<span class='styled-select' style='margin-right:1px'>
 			<span class='select_carat'>
 				<select class="" id='state'>
-					<option value='U.S.'>U.S.</option>
-					<option value='DC' selected>Washington, DC</option>
+					<option value='US' selected>United States</option>
+					<option value='DC'>Washington, DC</option>
 				</select>
 			</span>
 		</span>
 		the minimum wage is: 
 	</div>
 	<div class='telement' style='text-align:left'>
-		 $<input type='number' step='any' max='15' min='0' value='7.75' disabled>
+		 $<input type='number' step='any' value='7.75' id='currentmw' disabled>
 	</div>
 	<div class='telement' style='text-align:right;padding:6px 5px 6px 0px;'>
 		Increasing the minimum wage to: 
 	</div>
 	<div class='telement' style='text-align:left'>
-		 $<input type='number' step='any' max='15' min='0' placeholder='12.00'>
+		 $<input type='number' step='0.25' max='15' min='7.75' id='simulatedmw' value='12.00'>
 	</div>
 </div>
-
-<!-- <div class='textholder'>
-	<div class='telement'>Would lift...</div>
-</div> -->
-<svg id='di1' viewBox='0 0 700 220'></svg>
-<!-- <p>... out of poverty.</p> -->
+<div class='circles full-width'>
+Would lift 1.3 million residents of Washington, DC out of poverty
+	<div class='circleholder'>
+		<div class='circlecolumn'><div class='povcircle' style='background:linear-gradient(to bottom, #66c2a5 0%,#33836a 100%)'><div class='povcircleinterior1' id='povcirclechild'>8.8</div></div><div class='povcircleinterior2'>thousand children</div></div>
+		<div class='circlecolumn'><div class='povcircle' style='background:linear-gradient(to bottom, #f58c63 0%,#c63f26 100%)'><div class='povcircleinterior1' id='povcircleelder'>15</div></div><div class='povcircleinterior2'>thousand elderly</div></div>
+		<div class='circlecolumn'><div class='povcircle' style='background:linear-gradient(to bottom, #8c9fca 0%,#3f578c 100%)'><div class='povcircleinterior1' id='povcircleadult'>6</div></div><div class='povcircleinterior2'>thousand adults</div></div>
+	</div>
+</div>
 <div class='textholder'>
 	<div class='telement' style='width:90%'>
-		It would also boost the income of low-income families.
+		It would also boost the income of low-income families:
 	</div>
 </div>
-<svg id='di2' viewBox='0 0 700 220'></svg>
+<div class='full-width circles'>
+	<svg id='di2' viewBox='0 0 700 250'></svg>
+</div>
 </body>
 
 <script>
+// data
+var data = {'Mississippi': {'adults': 299, 'fifteenth': 15000, 'elderly': 56, 'tenth': 10000, 'children': 208, 'fifth': 5000, 'twentieth': 20000}, 'Oklahoma': {'adults': 308, 'fifteenth': 15000, 'elderly': 62, 'tenth': 10000, 'children': 181, 'fifth': 5000, 'twentieth': 20000}, 'Delaware': {'adults': 55, 'fifteenth': 15000, 'elderly': 18, 'tenth': 10000, 'children': 33, 'fifth': 5000, 'twentieth': 20000}, 'Minnesota': {'adults': 263, 'fifteenth': 15000, 'elderly': 61, 'tenth': 10000, 'children': 104, 'fifth': 5000, 'twentieth': 20000}, 'Illinois': {'adults': 794, 'fifteenth': 15000, 'elderly': 127, 'tenth': 10000, 'children': 459, 'fifth': 5000, 'twentieth': 20000}, 'Arkansas': {'adults': 283, 'fifteenth': 15000, 'elderly': 42, 'tenth': 10000, 'children': 150, 'fifth': 5000, 'twentieth': 20000}, 'New Mexico': {'adults': 212, 'fifteenth': 15000, 'elderly': 40, 'tenth': 10000, 'children': 148, 'fifth': 5000, 'twentieth': 20000}, 'Indiana': {'adults': 459, 'fifteenth': 15000, 'elderly': 109, 'tenth': 10000, 'children': 312, 'fifth': 5000, 'twentieth': 20000}, 'Maryland': {'adults': 315, 'fifteenth': 15000, 'elderly': 62, 'tenth': 10000, 'children': 189, 'fifth': 5000, 'twentieth': 20000}, 'Louisiana': {'adults': 485, 'fifteenth': 15000, 'elderly': 91, 'tenth': 10000, 'children': 278, 'fifth': 5000, 'twentieth': 20000}, 'Idaho': {'adults': 110, 'fifteenth': 15000, 'elderly': 19, 'tenth': 10000, 'children': 75, 'fifth': 5000, 'twentieth': 20000}, 'Wyoming': {'adults': 31, 'fifteenth': 15000, 'elderly': 8, 'tenth': 10000, 'children': 18, 'fifth': 5000, 'twentieth': 20000}, 'Tennessee': {'adults': 553, 'fifteenth': 15000, 'elderly': 99, 'tenth': 10000, 'children': 322, 'fifth': 5000, 'twentieth': 20000}, 'Arizona': {'adults': 658, 'fifteenth': 15000, 'elderly': 89, 'tenth': 10000, 'children': 410, 'fifth': 5000, 'twentieth': 20000}, 'Iowa': {'adults': 174, 'fifteenth': 15000, 'elderly': 45, 'tenth': 10000, 'children': 101, 'fifth': 5000, 'twentieth': 20000}, 'Michigan': {'adults': 728, 'fifteenth': 15000, 'elderly': 79, 'tenth': 10000, 'children': 452, 'fifth': 5000, 'twentieth': 20000}, 'Kansas': {'adults': 214, 'fifteenth': 15000, 'elderly': 38, 'tenth': 10000, 'children': 153, 'fifth': 5000, 'twentieth': 20000}, 'Utah': {'adults': 143, 'fifteenth': 15000, 'elderly': 23, 'tenth': 10000, 'children': 113, 'fifth': 5000, 'twentieth': 20000}, 'Virginia': {'adults': 536, 'fifteenth': 15000, 'elderly': 105, 'tenth': 10000, 'children': 253, 'fifth': 5000, 'twentieth': 20000}, 'Oregon': {'adults': 292, 'fifteenth': 15000, 'elderly': 32, 'tenth': 10000, 'children': 154, 'fifth': 5000, 'twentieth': 20000}, 'Connecticut': {'adults': 195, 'fifteenth': 15000, 'elderly': 15, 'tenth': 10000, 'children': 114, 'fifth': 5000, 'twentieth': 20000}, 'Montana': {'adults': 70, 'fifteenth': 15000, 'elderly': 10, 'tenth': 10000, 'children': 40, 'fifth': 5000, 'twentieth': 20000}, 'California': {'adults': 3145, 'fifteenth': 15000, 'elderly': 516, 'tenth': 10000, 'children': 1780, 'fifth': 5000, 'twentieth': 20000}, 'Massachusetts': {'adults': 487, 'fifteenth': 15000, 'elderly': 93, 'tenth': 10000, 'children': 202, 'fifth': 5000, 'twentieth': 20000}, 'West Virginia': {'adults': 156, 'fifteenth': 15000, 'elderly': 26, 'tenth': 10000, 'children': 79, 'fifth': 5000, 'twentieth': 20000}, 'South Carolina': {'adults': 414, 'fifteenth': 15000, 'elderly': 65, 'tenth': 10000, 'children': 204, 'fifth': 5000, 'twentieth': 20000}, 'New Hampshire': {'adults': 54, 'fifteenth': 15000, 'elderly': 17, 'tenth': 10000, 'children': 23, 'fifth': 5000, 'twentieth': 20000}, 'Wisconsin': {'adults': 360, 'fifteenth': 15000, 'elderly': 54, 'tenth': 10000, 'children': 240, 'fifth': 5000, 'twentieth': 20000}, 'Vermont': {'adults': 38, 'fifteenth': 15000, 'elderly': 7, 'tenth': 10000, 'children': 21, 'fifth': 5000, 'twentieth': 20000}, 'Georgia': {'adults': 984, 'fifteenth': 15000, 'elderly': 144, 'tenth': 10000, 'children': 705, 'fifth': 5000, 'twentieth': 20000}, 'North Dakota': {'adults': 43, 'fifteenth': 15000, 'elderly': 11, 'tenth': 10000, 'children': 28, 'fifth': 5000, 'twentieth': 20000}, 'Pennsylvania': {'adults': 899, 'fifteenth': 15000, 'elderly': 131, 'tenth': 10000, 'children': 513, 'fifth': 5000, 'twentieth': 20000}, 'Florida': {'adults': 1832, 'fifteenth': 15000, 'elderly': 396, 'tenth': 10000, 'children': 1025, 'fifth': 5000, 'twentieth': 20000}, 'Alaska': {'adults': 36, 'fifteenth': 15000, 'elderly': 6, 'tenth': 10000, 'children': 23, 'fifth': 5000, 'twentieth': 20000}, 'Kentucky': {'adults': 480, 'fifteenth': 15000, 'elderly': 120, 'tenth': 10000, 'children': 251, 'fifth': 5000, 'twentieth': 20000}, 'Hawaii': {'adults': 86, 'fifteenth': 15000, 'elderly': 20, 'tenth': 10000, 'children': 45, 'fifth': 5000, 'twentieth': 20000}, 'United States': {'adults': 24414, 'fifteenth': 15000, 'elderly': 4201, 'tenth': 10000, 'children': 14509, 'fifth': 5000, 'twentieth': 20000, 'twentiefifth':25000, 'thirtieth':30000, 'thirtyfifth':35000, 'fourtieth':40000}, 'Nebraska': {'adults': 108, 'fifteenth': 15000, 'elderly': 12, 'tenth': 10000, 'children': 72, 'fifth': 5000, 'twentieth': 20000}, 'Missouri': {'adults': 348, 'fifteenth': 15000, 'elderly': 61, 'tenth': 10000, 'children': 173, 'fifth': 5000, 'twentieth': 20000}, 'Ohio': {'adults': 870, 'fifteenth': 15000, 'elderly': 132, 'tenth': 10000, 'children': 547, 'fifth': 5000, 'twentieth': 20000}, 'Alabama': {'adults': 454, 'fifteenth': 15000, 'elderly': 88, 'tenth': 10000, 'children': 243, 'fifth': 5000, 'twentieth': 20000}, 'New York': {'adults': 1577, 'fifteenth': 15000, 'elderly': 321, 'tenth': 10000, 'children': 892, 'fifth': 5000, 'twentieth': 20000}, 'South Dakota': {'adults': 59, 'fifteenth': 15000, 'elderly': 15, 'tenth': 10000, 'children': 44, 'fifth': 5000, 'twentieth': 20000}, 'Colorado': {'adults': 327, 'fifteenth': 15000, 'elderly': 32, 'tenth': 10000, 'children': 179, 'fifth': 5000, 'twentieth': 20000}, 'New Jersey': {'adults': 574, 'fifteenth': 15000, 'elderly': 95, 'tenth': 10000, 'children': 335, 'fifth': 5000, 'twentieth': 20000}, 'Washington': {'adults': 463, 'fifteenth': 15000, 'elderly': 69, 'tenth': 10000, 'children': 287, 'fifth': 5000, 'twentieth': 20000}, 'North Carolina': {'adults': 824, 'fifteenth': 15000, 'elderly': 139, 'tenth': 10000, 'children': 546, 'fifth': 5000, 'twentieth': 20000}, 'Washington, DC': {'adults': 69, 'fifteenth': 15000, 'elderly': 12, 'tenth': 10000, 'children': 32, 'fifth': 5000, 'twentieth': 20000}, 'Texas': {'adults': 2162, 'fifteenth': 15000, 'elderly': 331, 'tenth': 10000, 'children': 1543, 'fifth': 5000, 'twentieth': 20000}, 'Nevada': {'adults': 210, 'fifteenth': 15000, 'elderly': 31, 'tenth': 10000, 'children': 129, 'fifth': 5000, 'twentieth': 20000}, 'Maine': {'adults': 97, 'fifteenth': 15000, 'elderly': 19, 'tenth': 10000, 'children': 50, 'fifth': 5000, 'twentieth': 20000}, 'Rhode Island': {'adults': 82, 'fifteenth': 15000, 'elderly': 12, 'tenth': 10000, 'children': 29, 'fifth': 5000, 'twentieth': 20000}}
 
-var di1 = Snap('#di1')
 var di2 = Snap('#di2')
 
-function get_state(){
+// set state based on ip
+get_state(function(response){
+	var a=JSON.parse(response)['region']
+	$('#state').val(a)
+})
+
+function get_state(callback){
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", 'http://ip-api.com/json', false );
-    xmlHttp.send( null );
-    return JSON.parse(xmlHttp.responseText)['region'];
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", 'http://ip-api.com/json', true); // true for asynchronous 
+    xmlHttp.send(null);
 }
 
+// draw first section (poverty measures)
 function draw_pov(){
-	var children=0
-	var elderly=0
-	var black=0
-	var latino=0
-	var white=0
+	var current_state=$('#state option:selected').text()
+	var increase_per=($('#simulatedmw').val()-$('#currentmw').val())/$('#currentmw').val()
+	var children=(.546*increase_per)*data[current_state]['children']
+	var elderly=(.514*increase_per)*data[current_state]['elderly']
+	var adult=(.476*increase_per)*data[current_state]['adults']
+
+	$('#povcirclechild').text(children.toFixed(1))
+	$('#povcircleelder').text(elderly.toFixed(1))
+	$('#povcircleadult').text(adult.toFixed(1))
 }
+
+// draw second section (income)
+// draw axes
+var grad = di2.gradient("l(0, 0, 1, 0)rgba(255,255,255,.3)-rgba(0,0,0,0)");
+di2.rect(140,10,560,210).attr({fill:grad})
+di2.rect(140,10,560,1).attr({fill:grad})
+di2.rect(140,219,560,1).attr({fill:grad})
+di2.line(140,10,140,220).attr({stroke:'white',shapeRendering:'crispEdges'})
+di2.line(270,10,270,220).attr({stroke:'white',shapeRendering:'crispEdges',opacity:.4,strokeDasharray:[10,10]})
+di2.line(400,10,400,220).attr({stroke:'white',shapeRendering:'crispEdges',opacity:.4,strokeDasharray:[10,10]})
+di2.line(530,10,530,220).attr({stroke:'white',shapeRendering:'crispEdges',opacity:.4,strokeDasharray:[10,10]})
+di2.line(660,10,660,220).attr({stroke:'white',shapeRendering:'crispEdges',opacity:.4,strokeDasharray:[10,10]})
+di2.text(130,47,['5th percentile families', '(~$15k income)']).attr({fontFamily:'Lato',fill:'white',fontWeight:300,fontSize:13,textAnchor:'end'}).selectAll("tspan:not(:first-child)").attr({dy:16,x:130})
+di2.text(130,92,['10th percentile families', '(~$20k income)']).attr({fontFamily:'Lato',fill:'white',fontWeight:300,fontSize:13,textAnchor:'end'}).selectAll("tspan:not(:first-child)").attr({dy:16,x:130})
+di2.text(130,137,['15th percentile families', '(~$25k income)']).attr({fontFamily:'Lato',fill:'white',fontWeight:300,fontSize:13,textAnchor:'end'}).selectAll("tspan:not(:first-child)").attr({dy:16,x:130})
+di2.text(130,182,['20th percentile families', '(~$30k income)']).attr({fontFamily:'Lato',fill:'white',fontWeight:300,fontSize:13,textAnchor:'end'}).selectAll("tspan:not(:first-child)").attr({dy:16,x:130})
+
+// key
+
+
+function draw_inc(){
+	var current_state=$('#state option:selected').text()
+	var increase_per=($('#simulatedmw').val()-$('#currentmw').val())/$('#currentmw').val()
+	var max_increase_per=(12-$('#currentmw').val())/$('#currentmw').val()
+	var fed_coefs={'fifth':[.275,.115],'tenth':[.426,.300],'fifteenth':[.407,.216],'twentieth':[.170,.134]}
+
+	var fifth_coef=match(current_state,'fifth')
+	var tenth_coef=match(current_state,'tenth')
+	var fifteenth_coef=match(current_state,'fifteenth')
+	var twentieth_coef=match(current_state,'twentieth')
+
+	var fifth=fifth_coef[0]*increase_per*data[current_state]['fifth']
+	var tenth=tenth_coef[0]*increase_per*data[current_state]['tenth']
+	var fifteenth=fifteenth_coef[0]*increase_per*data[current_state]['fifteenth']
+	var twentieth=twentieth_coef[0]*increase_per*data[current_state]['twentieth']
+	var fifth_aftertax=fifth_coef[1]*increase_per*data[current_state]['fifth']
+	var tenth_aftertax=tenth_coef[1]*increase_per*data[current_state]['tenth']
+	var fifteenth_aftertax=fifteenth_coef[1]*increase_per*data[current_state]['fifteenth']
+	var twentieth_aftertax=twentieth_coef[1]*increase_per*data[current_state]['twentieth']
+
+	var max_fifth=fifth_coef[0]*max_increase_per*data[current_state]['fifth']
+	var max_tenth=tenth_coef[0]*max_increase_per*data[current_state]['tenth']
+	var max_fifteenth=fifteenth_coef[0]*max_increase_per*data[current_state]['fifteenth']
+	var max_twentieth=twentieth_coef[0]*max_increase_per*data[current_state]['twentieth']
+
+	var values=[max_fifth,max_tenth,max_fifteenth,max_twentieth]
+	var max=Math.max(...values)
+	var min=Math.min(...values)
+
+	var grad2=di2.gradient("l(0, 1, 1, 0)#66c2a5-#33836a");
+	var grad3=di2.gradient("l(0, 1, 1, 0)#f58c63-#c63f26");
+
+	if(di2.selectAll("[type2]").length===0){
+		var rect_fifth=di2.rect(140+findx(fifth_aftertax,max,min),34,findx(fifth,max,min)-findx(fifth_aftertax,max,min),36).attr({fill:grad3,opacity:1,id:'rect_fifth',type2:1,stroke:'white'})
+		var rect_fifth_aftertax=di2.rect(140,34,findx(fifth_aftertax,max,min),36).attr({fill:grad2,opacity:1,id:'rect_fifth_aftertax',type2:1,stroke:'white'})
+		var rect_tenth=di2.rect(140+findx(tenth_aftertax,max,min),79,findx(tenth,max,min)-findx(tenth_aftertax,max,min),36).attr({fill:grad3,opacity:1,id:'rect_tenth',type2:1,stroke:'white'})
+		var rect_tenth_aftertax=di2.rect(140,79,findx(tenth_aftertax,max,min),36).attr({fill:grad2,opacity:1,id:'rect_tenth_aftertax',type2:1,stroke:'white'})
+		var rect_fifteenth=di2.rect(140+findx(fifteenth_aftertax,max,min),124,findx(fifteenth,max,min)-findx(fifteenth_aftertax,max,min),36).attr({fill:grad3,opacity:1,id:'rect_fifteenth',type2:1,stroke:'white'})
+		var rect_fifteenth_aftertax=di2.rect(140,124,findx(fifteenth_aftertax,max,min),36).attr({fill:grad2,opacity:1,id:'rect_fifteenth_aftertax',type2:1,stroke:'white'})
+		var rect_twentieth=di2.rect(140+findx(twentieth_aftertax,max,min),169,findx(twentieth,max,min)-findx(twentieth_aftertax,max,min),36).attr({fill:grad3,opacity:1,id:'rect_twentieth',type2:1,stroke:'white'})
+		var rect_twentieth_aftertax=di2.rect(140,169,findx(twentieth_aftertax,max,min),36).attr({fill:grad2,opacity:1,id:'rect_twentieth_aftertax',type2:1,stroke:'white'})
+	} else {
+		di2.select("[id='rect_fifth']").animate({x:140+findx(fifth_aftertax,max,min),width:findx(fifth,max,min)-findx(fifth_aftertax,max,min)},500)
+		di2.select("[id='rect_fifth_aftertax']").animate({width:findx(fifth_aftertax,max,min)},500)
+		di2.select("[id='rect_tenth']").animate({x:140+findx(tenth_aftertax,max,min),width:findx(tenth,max,min)-findx(tenth_aftertax,max,min)},500)
+		di2.select("[id='rect_tenth_aftertax']").animate({width:findx(tenth_aftertax,max,min)},500)
+		di2.select("[id='rect_fifteenth']").animate({x:140+findx(fifteenth_aftertax,max,min),width:findx(fifteenth,max,min)-findx(fifteenth_aftertax,max,min)},500)
+		di2.select("[id='rect_fifteenth_aftertax']").animate({width:findx(fifteenth_aftertax,max,min)},500)
+		di2.select("[id='rect_twentieth']").animate({x:140+findx(twentieth_aftertax,max,min),width:findx(twentieth,max,min)-findx(twentieth_aftertax,max,min)},500)
+		di2.select("[id='rect_twentieth_aftertax']").animate({width:findx(twentieth_aftertax,max,min)},500)
+	}
+}
+
+function match(state,level){
+	var state_income=data[state][level]
+	var US_distribution=[5000,10000,15000,20000,25000,30000,35000,40000]
+	var coefs=[[.275,.115],[.426,.300],[.407,.216],[.170,.134],[.164,.114],[.086,.049]]
+	for(var i=0;i<US_distribution.length;i++){
+		if(state_income>=US_distribution[i]){
+			var vent=i
+			break
+		}
+	}
+	return coefs[vent]
+}
+
+function findx(value,max,min){
+	return (530*(value/(max)))
+}
+
+// listen for changes to the proposal
+$('#simulatedmw').change(function(){
+	draw_inc()
+	draw_pov()
+})
 
 </script>
